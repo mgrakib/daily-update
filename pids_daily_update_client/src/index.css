@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Poppins:wght@300;400;500;600;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+:root{
+    --primary-color: #060B27;
+    --secondary-color: #090D2B;
+    --action-color: #2BB3C0;
+    --gray:#0C1427;
+    --dark-gray: #363D58;
+    --light-gray: #7D7997;
+    --ternary-gray: #CBCACE;
+    --white: #FFFDFF;
+    --border-color: #2A2649;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    font-family: 'Space Grotesk', sans-serif;
+    background-color: var(--primary-color);
+    padding: 10px 20px;
+}
+
+
+::-webkit-scrollbar{
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #0C1427; 
+}
+::-webkit-scrollbar-thumb {
+  background-color: #2BB3C0;
+  border-radius: 10px;
+}
+
+::-webkit-inner-spin-button,
+.no-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

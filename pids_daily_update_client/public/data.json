@@ -1,0 +1,23 @@
+{
+        "stationName":"Kashimpur Central Jail -1",
+        "stationKey":"kas1",
+	    "operator":{
+            "1840":{
+				"name": "MG Rakib",
+				"entry": [20, 155, 45, 12, 0],
+				"release": [2, 52, 45, 78]
+			},
+            "1841":{
+				"name": "MG Rakib",
+				"entry": [20, 155, 45, 12, 0],
+				"release": [2, 52, 45, 78]
+			}
+        },
+
+        "jailWarder": {
+            "entry":[20,155,45,12,0],
+            "release":[2,52,45,78]
+        }
+}
+
+
