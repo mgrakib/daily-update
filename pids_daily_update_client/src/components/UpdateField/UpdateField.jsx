@@ -1,9 +1,10 @@
+/** @format */
 
 import { useForm } from "react-hook-form";
 
 const UpdateField = ({ workStation }) => {
-    const {
-		register,
+	const {
+		register,reset ,
 		handleSubmit,
 		watch,
 		formState: { errors },
@@ -12,14 +13,14 @@ const UpdateField = ({ workStation }) => {
 		data.stationName = workStation?.stationKey;
 
 		const newData = workStation.operator.map(ope => {
+			console.log(ope)
 			return {
-				serviceId: ope.id,
+				// serviceId: ope.id,
+				email: ope.email,
 				entry: parseInt(data[`Entry_${ope.id}`]),
 				release: parseInt(data[`Release_${ope.id}`]),
 			};
 		});
-
-		
 
 		const {
 			active,
@@ -46,7 +47,11 @@ const UpdateField = ({ workStation }) => {
 			body: JSON.stringify(allData),
 		})
 			.then(res => res.json())
-			.then(data => console.log(data));
+			.then(data => {
+				console.log(data);
+				reset();
+			});
+		
 	};
 
 	return (

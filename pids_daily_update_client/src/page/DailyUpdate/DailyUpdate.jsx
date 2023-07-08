@@ -1,48 +1,63 @@
+/** @format */
+
 import moment from "moment/moment";
 import Container from "../../components/Container/Container";
 import { useEffect, useState } from "react";
-import image from '../../assets/image 2.png'
-import logo from '../../assets/logo.png'
+import image from "../../assets/image 2.png";
+import logo from "../../assets/logo.png";
 import { useQuery } from "react-query";
 import UpdateField from "../../components/UpdateField/UpdateField";
 import useAxiosSecure from "../../hooks/useAxiosInstance";
-
+import useAuth from "../../hooks/useAuth";
+import UserSummary from "../../components/UsersComponent/UserSummary/UserSummary";
 
 const DailyUpdate = () => {
-    const date = new Date().toString()
-    const [time, setTime] = useState(new Date());
+	const date = new Date().toString();
+	const [time, setTime] = useState(new Date());
 
-	// useEffect(() => {
-	// 	const timer = setInterval(() => {
-	// 		setTime(new Date());
-	// 	}, 1000); // Update every second
+	useEffect(() => {
+		const timer = setInterval(() => {
+			setTime(new Date());
+		}, 1000); // Update every second
 
-	// 	return () => {
-	// 		clearInterval(timer);
-	// 	};
-    // }, []);
-    
+		return () => {
+			clearInterval(timer);
+		};
+	}, []);
 
-    const { axiosSEcure } = useAxiosSecure();
-    const [workStation, setWorkStation] = useState({})
-    const {data, isLoading } = useQuery(
-        {
-            queryKey: ['work-station'],
-            queryFn: async () => {
-                fetch("http://localhost:5000/workstation")
-					.then(res => res.json())
-					.then(data => setWorkStation(data));
-            }
-        }
-    )
+	const { user, logOut } = useAuth();
 
-    // console.log(workStation);
+	const { axiosSEcure } = useAxiosSecure();
+	const [workStation, setWorkStation] = useState({});
+	const { data, isLoading } = useQuery({
+		queryKey: ["work-station"],
+		queryFn: async () => {
+			fetch(`http://localhost:5000/workstation/?email=${user?.email}`)
+				.then(res => res.json())
+				.then(data => setWorkStation(data));
+		},
+	});
 
-    return (
-		<div>
+
+	const [showLogout, setShowLogout] = useState(false);
+	const handelLogout = () => {
+		logOut()
+			.then(res => {})
+			.catch(err => {
+				
+			});
+	};
+
+	const handelShowLogOut = event => {
+		event.stopPropagation();
+		console.log('first')
+		setShowLogout(!showLogout);
+	};
+	return (
+		<div onClick={() => setShowLogout(false)}>
 			<Container>
 				<div className='bg-gray px-[16px] text-white flex items-center justify-between py-[8px]'>
-					<div className='flex items-center gap-[22px]'>
+					<div className='flex items-center gap-[22px] min-w-[180px] '>
 						<div className='text-[12px]'>
 							{moment(date).format("MM-DD-YYYY")}
 						</div>
@@ -57,14 +72,30 @@ const DailyUpdate = () => {
 						</h1>
 					</div>
 
-					<div className='flex items-center gap-3'>
-						<div className='w-[40px] h-[40px] rounded-full overflow-hidden'>
-							<img
-								src={image}
-								alt=''
-							/>
+					<div className='relative min-w-[150px] flex items-center justify-end '>
+						<div
+							onClick={handelShowLogOut}
+							className='flex items-center gap-3 cursor-pointer '
+						>
+							<div className='w-[40px] h-[40px] rounded-full overflow-hidden'>
+								<img
+									src={user?.photoURL}
+									alt=''
+								/>
+							</div>
+							<div className='cursor-pointer'>
+								{user?.displayName}
+							</div>
 						</div>
-						<div>MG Rakib</div>
+						<div
+							className={`py-4 px-5 bg-[#090D2B] absolute duration-300 ${
+								showLogout
+									? "top-[120%]  opacity-100 max-h-[100px]"
+									: "top-[160%] opacity-0 max-h-0"
+							} shadow-[0_4px_4px_0_rgba(0,0,0,.25)] rounded`}
+						>
+							<button onClick={handelLogout}>Log Out</button>
+						</div>
 					</div>
 				</div>
 
@@ -88,69 +119,7 @@ const DailyUpdate = () => {
 							</div>
 
 							{/* summary  */}
-							<div className='mt-[24px]  bg-secondary-color w-[410px] mx-auto rounded-md'>
-								<h6 className='px-[20px] py-[15px] text-[20px] text-ternary-gray font-bold border-b border-border-color'>
-									Summary_
-								</h6>
-
-								<div className='px-[20px] py-[15px]'>
-									<div>
-										<h6 className='text-[18px] text-ternary-gray pb-[5px] border-b border-border-color'>
-											Yesterday's Report_
-										</h6>
-
-										<div className='py-[5px] border-b border-border-color flex items-center justify-between'>
-											<p className='text-light-gray'>
-												Entry:
-											</p>
-											<p className='text-white'>30</p>
-										</div>
-										<div className='py-[5px] border-b border-border-color flex items-center justify-between'>
-											<p className='text-light-gray'>
-												Release:
-											</p>
-											<p className='text-white'>30</p>
-										</div>
-									</div>
-
-									<div className='mt-[15px]'>
-										<h6 className='text-[18px] text-ternary-gray pb-[5px] border-b border-border-color'>
-											Last 30 Days’ Report_
-										</h6>
-
-										<div className='py-[5px] border-b border-border-color flex items-center justify-between'>
-											<p className='text-light-gray'>
-												Entry:
-											</p>
-											<p className='text-white'>30</p>
-										</div>
-										<div className='py-[5px] border-b border-border-color flex items-center justify-between'>
-											<p className='text-light-gray'>
-												Release:
-											</p>
-											<p className='text-white'>30</p>
-										</div>
-									</div>
-									<div className='mt-[15px]'>
-										<h6 className='text-[18px] text-ternary-gray pb-[5px] border-b border-border-color'>
-											Average_
-										</h6>
-
-										<div className='py-[5px] border-b border-border-color flex items-center justify-between'>
-											<p className='text-light-gray'>
-												Entry:
-											</p>
-											<p className='text-white'>30</p>
-										</div>
-										<div className='py-[5px] border-b border-border-color flex items-center justify-between'>
-											<p className='text-light-gray'>
-												Release:
-											</p>
-											<p className='text-white'>30</p>
-										</div>
-									</div>
-								</div>
-							</div>
+							<UserSummary />
 						</div>
 
 						{/* Work station  */}
@@ -158,10 +127,10 @@ const DailyUpdate = () => {
 							{/* display work station  */}
 							<div>
 								<h1 className='text-[24px] font-bold text-white'>
-									{workStation?.stationName}
+									{workStation?.workStationName}
 								</h1>
 								<p className='text-[18px] text-light-gray'>
-									Md. Golam Rakib_
+									{user?.displayName}
 								</p>
 							</div>
 

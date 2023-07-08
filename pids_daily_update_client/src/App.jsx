@@ -5,11 +5,11 @@ import './App.css'
 function App() {
 
   return (
-    <>
+    <div className='py-[10px] px-[20px]'>
      
     <Outlet />
       
-    </>
+    </div>
   )
 }
 
