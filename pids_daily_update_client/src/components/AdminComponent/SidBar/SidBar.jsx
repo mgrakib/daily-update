@@ -45,9 +45,9 @@ const SidBar = () => {
 							<TbReportSearch /> Report_
 						</li>
 					</Link>
-					<Link>
+					<Link to='/admin/dashboard/transfer-operator'>
 						<li className=' text-[#CBCACE] p-[9px] rounded-sm flex items-center gap-[9px] cursor-pointer'>
-							<BiTransferAlt /> Transfer User_
+							<BiTransferAlt /> Transfer Operator_
 						</li>
 					</Link>
 					<Link

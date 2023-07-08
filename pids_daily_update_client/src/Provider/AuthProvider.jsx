@@ -23,9 +23,8 @@ const auth = getAuth(app);
 const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState("null");
 	const [loading, setLoading] = useState(true);
-	const [isDark, setIsDark] = useState(
-		localStorage.getItem("theme") === "dark"
-	);
+	
+	let [isOpen, setIsOpen] = useState(false);
 
 	// sing up
 	const createUser = (email, password) => {
@@ -78,8 +77,8 @@ const AuthProvider = ({ children }) => {
 		userLogin,
 		googleLogin,
 		logOut,
-		isDark,
-		setIsDark,
+		isOpen,
+		setIsOpen,
 	};
 	return (
 		<AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>

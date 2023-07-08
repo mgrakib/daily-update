@@ -9,6 +9,7 @@ import Login from "../page/Login/Login";
 import PrivateRoute from "./PrivateRoute";
 import AdminRouter from "./AdminRouter";
 import AdminDashboard from "../page/AdminDashboard/AdminDashboard";
+import TransfarOperator from "../page/AdminPage/AddUser/TransfarOperator";
 
 const router = createBrowserRouter([
 	{
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
 			{
 				path: "/admin/dashboard/adduser",
 				element: <AddUser />,
+			},
+			{
+				path: "/admin/dashboard/transfer-operator",
+				element: <TransfarOperator />,
 			},
 		],
 	},
