@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import Modal from "../../../components/modal/Modal";
 
@@ -10,19 +10,22 @@ const TransfarOperator = () => {
     const [operator, setOperator] = useState({});
     const handelFindUserId = () => {
         const email = operatorEmail?.current?.value;
-        axios(`http://localhost:5000/user-summary/?email=${email}`).then(res =>
-        { 
-            if (res.data.length === 0) {
-                setIsOpen(true);
-            } else {
-                setOperator(res?.data[0]?.operator[0]);
-                setBtnDisable(false);
-            }
-        }
-		);
+        axios(`http://localhost:5000/single-user/?email=${email}`).then(res => {
+			if (res.data.length === 0) {
+				setIsOpen(true);
+				setOperator({});
+				setBtnDisable(true);
+			} else {
+				setOperator(res?.data);
+				setBtnDisable(false);
+			}
+		});
     }
 
-    console.log(operator);
+	
+	const [isEmptyWorkStationName, setIsEmptyWorkStationName] = useState(false)
+	const [isEmptyWorkStationKey, setIsEmptyWorkStationKey] = useState(false)
+    
 
     const handelTransfer = (event) => {
         event.preventDefault();
@@ -30,15 +33,45 @@ const TransfarOperator = () => {
         const form = event.target;
         const email = operatorEmail?.current?.value;
         const newStaionName = form.newWorkStationName.value;
-        const newStaionKey = form.newStationKey.value;
-        const operatorId = operator?.id;
-        const transferData = { email, newStaionName, newStaionKey, operatorId };
-
+		const newStaionKey = form.newStationKey.value;
+		const currentStationKey = operator?.stationKey;
+		const operatorId = operator?.servicId;
+		const name = operator?.name;
+		setIsEmptyWorkStationName(false);
+		setIsEmptyWorkStationKey(false);
+		if (newStaionName === '' ) {
+			return setIsEmptyWorkStationName(true);
+		} else if (newStaionKey === '') {
+			return setIsEmptyWorkStationKey(true);
+		}
+        const transferData = {
+			email,
+			newStaionName,
+			newStaionKey,
+			operatorId,
+			name,
+			currentStationKey,
+		};
         
-        axios.put(`http://localhost:5000/transfer-operator`, transferData).then(res => console.log(res))
+		axios.put(`http://localhost:5000/transfer-operator`, transferData).then(res => {
+			console.log(res)
+			form.reset();
+		})
 
-        console.log(transferData);
-    }
+	}
+	
+	const [workStationKey, setWorkStationKey] = useState([]);
+	const [workStationName, setWorkStationName] = useState([]);
+	useEffect(() => {
+		fetch("/public/stationKey.json")
+			.then(res => res.json())
+			.then(data => setWorkStationKey(data?.common_names));
+
+		fetch("/public/jail_name.json")
+			.then(res => res.json())
+			.then(data => setWorkStationName(data.jail_names));
+	}, []);
+	
     return (
 		<div className='w-[75%] mx-auto p-5 bg-secondary-color'>
 			<div>
@@ -76,7 +109,7 @@ const TransfarOperator = () => {
 								</label>
 								<div className='h-[50px] px-3 border border-border-color rounded-[5px] '>
 									<input
-										value={operator?.id}
+										value={operator?.servicId}
 										type='name'
 										placeholder={`Service Id_`}
 										className='w-full h-full bg-transparent outline-none placeholder:text-dark-gray text-white'
@@ -114,8 +147,8 @@ const TransfarOperator = () => {
 								</label>
 								<div className='h-[50px] px-3 border border-border-color rounded-[5px] '>
 									<input
-										type='email'
-										value={operator?.email}
+										type='text'
+										value={operator?.stationKey}
 										placeholder={`Email_`}
 										className='w-full h-full bg-transparent outline-none placeholder:text-dark-gray text-white'
 									/>
@@ -151,12 +184,38 @@ const TransfarOperator = () => {
 									{`New Work Station_`}
 								</label>
 								<div className='h-[50px] px-3 border border-border-color rounded-[5px] '>
-									<input
-										type='text'
+									<select
 										name='newWorkStationName'
-										placeholder={`New Work Station_`}
+										id=''
 										className='w-full h-full bg-transparent outline-none placeholder:text-dark-gray text-white'
-									/>
+									>
+										{workStationName.map(
+											(stationName, index) => (
+												<option
+													disabled={
+														operator?.workStationName ===
+														stationName
+													}
+													key={index}
+													value={stationName}
+													className={`text-primary-color ${
+														operator?.workStationName ===
+															stationName &&
+														"text-red-700 bg-red-200"
+													}`}
+												>
+													{stationName === ""
+														? "Select New Work Station_"
+														: stationName}
+												</option>
+											)
+										)}
+									</select>
+									{isEmptyWorkStationName && (
+										<p className='text-red-500 text-xs mt-1'>
+											New Work Station_ is required
+										</p>
+									)}
 								</div>
 							</div>
 
@@ -169,12 +228,38 @@ const TransfarOperator = () => {
 									{`New Work Station key_`}
 								</label>
 								<div className='h-[50px] px-3 border border-border-color rounded-[5px] '>
-									<input
-										type='text'
+									<select
 										name='newStationKey'
-										placeholder={`New Work Station key_`}
+										id=''
 										className='w-full h-full bg-transparent outline-none placeholder:text-dark-gray text-white'
-									/>
+									>
+										{workStationKey.map(
+											(stationKey, index) => (
+												<option
+													disabled={
+														operator?.stationKey ===
+														stationKey
+													}
+													key={index}
+													value={stationKey}
+													className={`text-primary-color ${
+														operator?.stationKey ===
+															stationKey &&
+														"text-red-700 bg-red-200"
+													}`}
+												>
+													{stationKey === ""
+														? "Select New Work Station key_"
+														: stationKey}
+												</option>
+											)
+										)}
+									</select>
+									{isEmptyWorkStationKey && (
+										<p className='text-red-500 text-xs mt-1'>
+											New Work Station key_ is required
+										</p>
+									)}
 								</div>
 							</div>
 						</div>

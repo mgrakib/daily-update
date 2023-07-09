@@ -45,8 +45,16 @@ const SidBar = () => {
 							<TbReportSearch /> Report_
 						</li>
 					</Link>
-					<Link to='/admin/dashboard/transfer-operator'>
-						<li className=' text-[#CBCACE] p-[9px] rounded-sm flex items-center gap-[9px] cursor-pointer'>
+					<Link
+						onClick={() => setActiveLink("transferOperator")}
+						to='/admin/dashboard/transfer-operator'
+					>
+						<li
+							className={` text-[#CBCACE] p-[9px] rounded-sm flex items-center gap-[9px] cursor-pointer ${
+								activeLink === "transferOperator" &&
+								"bg-[#151A3D]"
+							}`}
+						>
 							<BiTransferAlt /> Transfer Operator_
 						</li>
 					</Link>

@@ -1,7 +1,7 @@
 /** @format */
 
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiUpload } from "react-icons/bi";
 import useAuth from "../../../hooks/useAuth";
@@ -32,6 +32,7 @@ const AddUser = () => {
 		const formData = new FormData();
 		formData.append("image", image);
 
+		
 		axios
 			.post(
 				`https://api.imgbb.com/1/upload?key=905fa03856a3b3ef4c7407c67e906831`,
@@ -70,15 +71,20 @@ const AddUser = () => {
 		setImageName(image.name);
 	};
 
-	const hanelGoogle = () => {
-		googleLogin()
-			.then(result => {
-				console.log(result);
-			})
-			.catch(error => {
-				console.log(error);
-			});
-	};
+	const [workStationKey, setWorkStationKey] = useState([]);
+	const [workStationName, setWorkStationName] = useState([]);
+	useEffect(() => {
+		fetch("/public/stationKey.json")
+			.then(res => res.json())
+			.then(data => setWorkStationKey(data?.common_names));
+		
+		fetch("/public/jail_name.json")
+			.then(res => res.json())
+			.then(data => setWorkStationName(data.jail_names));
+	}, [])
+	
+	
+
 
 	return (
 		<div className='w-[75%] mx-auto p-5 bg-secondary-color'>
@@ -92,15 +98,24 @@ const AddUser = () => {
 								htmlFor=''
 								className='text-[12px] text-light-gray'
 							>
-								{`Full Name`}
+								{`Full Name `}{" "}
+								<span className='text-red-500'>*</span>
 							</label>
 							<div className='h-[50px] px-3 border border-border-color rounded-[5px] '>
 								<input
 									type='name'
-									{...register(`name`)}
+									{...register(`name`, { required: true })}
 									placeholder={`Full Name`}
 									className='w-full h-full bg-transparent outline-none placeholder:text-dark-gray text-white'
 								/>
+								{errors.name?.type === "required" && (
+									<p
+										role='alert'
+										className='text-red-500 text-xs mt-1'
+									>
+										Name is required
+									</p>
+								)}
 							</div>
 						</div>
 
@@ -110,15 +125,24 @@ const AddUser = () => {
 								htmlFor=''
 								className='text-[12px] text-light-gray'
 							>
-								{`Email`}
+								{`Email`}{" "}
+								<span className='text-red-500'>*</span>
 							</label>
 							<div className='h-[50px] px-3 border border-border-color rounded-[5px] '>
 								<input
 									type='email'
-									{...register(`emali`)}
+									{...register(`emali`, { required: true })}
 									placeholder={`Email`}
 									className='w-full h-full bg-transparent outline-none placeholder:text-dark-gray text-white'
 								/>
+								{errors.emali?.type === "required" && (
+									<p
+										role='alert'
+										className='text-red-500 text-xs mt-1'
+									>
+										Emali is required
+									</p>
+								)}
 							</div>
 						</div>
 					</div>
@@ -131,7 +155,8 @@ const AddUser = () => {
 								htmlFor='photo'
 								className='text-[12px] text-light-gray'
 							>
-								{"photo"}
+								{"photo"}{" "}
+								<span className='text-red-500'>*</span>
 								<div className='h-[50px] px-3 py-2 cursor-pointer border border-border-color rounded-[5px] flex items-center gap-5 text-[14px]'>
 									<input
 										onChange={handleImageChange}
@@ -156,14 +181,25 @@ const AddUser = () => {
 								className='text-[12px] text-light-gray'
 							>
 								{`Service Id`}
+								<span className='text-red-500'>*</span>
 							</label>
 							<div className='h-[50px] px-3 border border-border-color rounded-[5px] '>
 								<input
 									type='name'
-									{...register(`servicId`)}
+									{...register(`servicId`, {
+										required: true,
+									})}
 									placeholder={`Service Id`}
 									className='w-full h-full bg-transparent outline-none placeholder:text-dark-gray text-white'
 								/>
+								{errors.servicId?.type === "required" && (
+									<p
+										role='alert'
+										className='text-red-500 text-xs mt-1'
+									>
+										Service Id is required
+									</p>
+								)}
 							</div>
 						</div>
 					</div>
@@ -176,15 +212,41 @@ const AddUser = () => {
 								htmlFor=''
 								className='text-[12px] text-light-gray'
 							>
-								{`Work Station Name`}
+								{`Work Station Name`}{" "}
+								<span className='text-red-500'>*</span>
 							</label>
 							<div className='h-[50px] px-3 border border-border-color rounded-[5px] '>
-								<input
-									type='name'
-									{...register(`workStationName`)}
-									placeholder={`Work Station Name`}
+								<select
+									name=''
+									id=''
+									{...register(`workStationName`, {
+										required: true,
+									})}
 									className='w-full h-full bg-transparent outline-none placeholder:text-dark-gray text-white'
-								/>
+								>
+									{workStationName.map(
+										(stationKey, index) => (
+											<option
+												key={index}
+												value={stationKey}
+												className='text-primary-color'
+											>
+												{stationKey === ""
+													? "Select Work Station Name"
+													: stationKey}
+											</option>
+										)
+									)}
+								</select>
+								{errors.workStationName?.type ===
+									"required" && (
+									<p
+										role='alert'
+										className='text-red-500 text-xs mt-1'
+									>
+										Work Station Name is required
+									</p>
+								)}
 							</div>
 						</div>
 
@@ -194,15 +256,44 @@ const AddUser = () => {
 								htmlFor=''
 								className='text-[12px] text-light-gray'
 							>
-								{`Work Station Key`}
+								{`Work Station Key`}{" "}
+								<span className='text-red-500'>*</span>
 							</label>
 							<div className='h-[50px] px-3 border border-border-color rounded-[5px] '>
-								<input
+								{/* <input
 									type='text'
-									{...register(`stationKey`)}
+									
 									placeholder={`Work Station Key`}
+								/> */}
+
+								<select
+									name=''
+									id=''
+									{...register(`stationKey`, {
+										required: true,
+									})}
 									className='w-full h-full bg-transparent outline-none placeholder:text-dark-gray text-white'
-								/>
+								>
+									{workStationKey.map((stationKey, index) => (
+										<option
+											key={index}
+											value={stationKey}
+											className='text-primary-color'
+										>
+											{stationKey === ""
+												? "Select Work Station Key"
+												: stationKey}
+										</option>
+									))}
+								</select>
+								{errors.stationKey?.type === "required" && (
+									<p
+										role='alert'
+										className='text-red-500 text-xs mt-1'
+									>
+										Work Station Key is required
+									</p>
+								)}
 							</div>
 						</div>
 					</div>
@@ -215,15 +306,26 @@ const AddUser = () => {
 								htmlFor=''
 								className='text-[12px] text-light-gray'
 							>
-								{`Password`}
+								{`Password`}{" "}
+								<span className='text-red-500'>*</span>
 							</label>
 							<div className='h-[50px] px-3 border border-border-color rounded-[5px] '>
 								<input
 									type='password'
-									{...register(`password`)}
+									{...register(`password`, {
+										required: true,
+									})}
 									placeholder={`Password`}
 									className='w-full h-full bg-transparent outline-none placeholder:text-dark-gray text-white'
 								/>
+								{errors.stationKey?.type === "required" && (
+									<p
+										role='alert'
+										className='text-red-500 text-xs mt-1'
+									>
+										Password is required
+									</p>
+								)}
 							</div>
 						</div>
 						{/* Confirm Password  */}
@@ -254,10 +356,6 @@ const AddUser = () => {
 					</div>
 				</div>
 			</form>
-
-			<div>
-				<button onClick={hanelGoogle}>Google </button>
-			</div>
 		</div>
 	);
 };
