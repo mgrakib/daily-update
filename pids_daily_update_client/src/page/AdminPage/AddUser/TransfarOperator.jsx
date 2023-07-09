@@ -137,19 +137,19 @@ const TransfarOperator = () => {
 						</div>
 						{/* email and currnet station  */}
 						<div className='flex items-center justify-between gap-10'>
-							{/* email  */}
+							{/* Current Work Station Key_ */}
 							<div className='w-1/2'>
 								<label
 									htmlFor=''
 									className='text-[12px] text-light-gray'
 								>
-									{`Email_`}
+									{`Current Work Station Key_`}
 								</label>
 								<div className='h-[50px] px-3 border border-border-color rounded-[5px] '>
 									<input
 										type='text'
 										value={operator?.stationKey}
-										placeholder={`Email_`}
+										placeholder={`Current Work Station Key_`}
 										className='w-full h-full bg-transparent outline-none placeholder:text-dark-gray text-white'
 									/>
 								</div>
