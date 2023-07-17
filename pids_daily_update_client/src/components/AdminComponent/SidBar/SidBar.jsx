@@ -40,8 +40,15 @@ const SidBar = () => {
 							<BiSolidDashboard /> Dashboard_
 						</li>
 					</Link>
-					<Link>
-						<li className=' text-[#CBCACE] p-[9px] rounded-sm flex items-center gap-[9px] cursor-pointer'>
+					<Link
+						onClick={() => setActiveLink("daily-report")}
+						to='/admin/dashboard/daily-report'
+					>
+						<li
+							className={` text-[#CBCACE] p-[9px] rounded-sm flex items-center gap-[9px] cursor-pointer ${
+								activeLink === "daily-report" && "bg-[#151A3D]"
+							}`}
+						>
 							<TbReportSearch /> Report_
 						</li>
 					</Link>

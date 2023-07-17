@@ -1,5 +1,6 @@
 /** @format */
 
+import moment from "moment";
 import { useForm } from "react-hook-form";
 
 const UpdateField = ({ workStation }) => {
@@ -22,6 +23,7 @@ const UpdateField = ({ workStation }) => {
 			};
 		});
 
+		
 		const {
 			active,
 			jailWarderEntry,
@@ -30,6 +32,7 @@ const UpdateField = ({ workStation }) => {
 			stationName,
 		} = data;
 
+		const reportDate = moment(new Date).format('YYYY-MM-DD');
 		const allData = {
 			active,
 			jailWarderEntry,
@@ -37,6 +40,7 @@ const UpdateField = ({ workStation }) => {
 			lockup,
 			stationName,
 			newData,
+			reportDate,
 		};
 
 		fetch("http://localhost:5000/updateDailyValue", {

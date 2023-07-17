@@ -12,6 +12,10 @@ const UserSummary = () => {
 			.then(data => setUserSummary(data));
 	}, [user]);
 
+
+	
+
+	
 	// last 30 less than entry
 	let allEntry = [];
 	if (userSummary[0]?.operator[0]?.entry.length > 30) {
@@ -20,9 +24,11 @@ const UserSummary = () => {
 		allEntry = userSummary[0]?.operator[0]?.entry;
 	}
 	const entrySum = allEntry?.reduce((value, currentValue) => {
-		return value + currentValue;
+	
+		return value + currentValue.entry;
 	}, 0);
 
+	
 	// last 30 days release
 	let allRelease = [];
 	if (userSummary[0]?.operator[0]?.release.length > 30) {
@@ -31,10 +37,11 @@ const UserSummary = () => {
 		allRelease = userSummary[0]?.operator[0]?.release;
 	}
 	const releaseSum = allRelease?.reduce((value, currentValue) => {
-		return value + currentValue;
+		
+		return value + currentValue?.release;
 	}, 0);
 
-	console.log(releaseSum, allRelease);
+
 	return (
 		<div className='mt-[24px]  bg-secondary-color w-[410px] mx-auto rounded-md'>
 			<h6 className='px-[20px] py-[15px] text-[20px] text-ternary-gray font-bold border-b border-border-color'>
@@ -50,16 +57,16 @@ const UserSummary = () => {
 					<div className='py-[5px] border-b border-border-color flex items-center justify-between'>
 						<p className='text-light-gray'>Entry:</p>
 						<p className='text-white'>
-							{userSummary[0]?.operator[0]?.entry[0] > 0
-								? userSummary[0]?.operator[0]?.entry[0]
+							{userSummary[0]?.operator[0]?.entry[0]?.entry > 0
+								? userSummary[0]?.operator[0]?.entry[0]?.entry
 								: 0}
 						</p>
 					</div>
 					<div className='py-[5px] border-b border-border-color flex items-center justify-between'>
 						<p className='text-light-gray'>Release:</p>
 						<p className='text-white'>
-							{userSummary[0]?.operator[0]?.release[0] > 0
-								? userSummary[0]?.operator[0]?.release[0]
+							{userSummary[0]?.operator[0]?.release[0]?.release > 0
+								? userSummary[0]?.operator[0]?.release[0]?.release
 								: 0}
 						</p>
 					</div>

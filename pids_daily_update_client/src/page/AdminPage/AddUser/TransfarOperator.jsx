@@ -81,7 +81,7 @@ const TransfarOperator = () => {
 							<input
 								ref={operatorEmail}
 								type='email'
-								placeholder={`Service Id_`}
+								placeholder={`Operator Email`}
 								className='w-full h-full bg-transparent outline-none placeholder:text-dark-gray text-primary-color pr-20'
 							/>
 						</div>

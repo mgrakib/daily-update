@@ -10,6 +10,8 @@ import PrivateRoute from "./PrivateRoute";
 import AdminRouter from "./AdminRouter";
 import AdminDashboard from "../page/AdminDashboard/AdminDashboard";
 import TransfarOperator from "../page/AdminPage/AddUser/TransfarOperator";
+import AdminDashboardPage from "../page/AdminPage/AdminDashboardPage/AdminDashboardPage";
+import Report from "../page/AdminPage/Report/Report";
 
 const router = createBrowserRouter([
 	{
@@ -33,11 +35,16 @@ const router = createBrowserRouter([
 	{
 		path: "/admin/dashboard",
 		element: (
-			<AdminRouter>
-				<AdminDashboard />
-			</AdminRouter>
+			// <AdminRouter>
+				
+			// </AdminRouter>
+			<AdminDashboard />
 		),
 		children: [
+			{
+				path: "/admin/dashboard",
+				element: <AdminDashboardPage />,
+			},
 			{
 				path: "/admin/dashboard/adduser",
 				element: <AddUser />,
@@ -45,6 +52,10 @@ const router = createBrowserRouter([
 			{
 				path: "/admin/dashboard/transfer-operator",
 				element: <TransfarOperator />,
+			},
+			{
+				path: "/admin/dashboard/daily-report",
+				element: <Report />,
 			},
 		],
 	},

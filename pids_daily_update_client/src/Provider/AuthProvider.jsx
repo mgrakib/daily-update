@@ -16,6 +16,7 @@ import {
 
 import axios from "axios";
 import { app } from "../Firebase/Firebase";
+import moment from "moment";
 
 export const AuthContext = createContext({});
 const auth = getAuth(app);
@@ -25,6 +26,10 @@ const AuthProvider = ({ children }) => {
 	const [loading, setLoading] = useState(true);
 	
 	let [isOpen, setIsOpen] = useState(false);
+
+	const [reportDate, setReportDate] = useState(
+		moment(new Date()).format("YYYY-MM-DD")
+	);
 
 	// sing up
 	const createUser = (email, password) => {
@@ -79,6 +84,8 @@ const AuthProvider = ({ children }) => {
 		logOut,
 		isOpen,
 		setIsOpen,
+		reportDate,
+		setReportDate,
 	};
 	return (
 		<AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
